@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/Auth/Shop_owner_register.dart';
 import 'package:new_app/Auth/forgot_password.dart';
 import 'package:new_app/Auth/login_page.dart';
 import 'package:new_app/Auth/not_you.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         "forgot_password": (context) => const ForgotPassword(),
         "not_you": (context) => const NotYouPage(),
         "register": (context) => const RegisterPage(),
+        "shop_register": (context) => const ShopOwnerRegister(),
       },
     );
   }
