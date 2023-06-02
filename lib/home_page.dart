@@ -138,18 +138,18 @@ class _HomePageState extends State<HomePage> {
         showModalBottomSheet(
           context: context,
           builder: (context) {
-            return Consumer<Change>(
-              builder: (context, change, child) {
-                return Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      change.change();
-                    },
-                    child: Text(change.isChanged == true ? "Changed" : "rechange"),
-                  ),
-                );
-              }
-            );
+            return Consumer<PasswordVisibility>(
+                builder: (context, change, child) {
+              return Center(
+                child: GestureDetector(
+                  onTap: () {
+                    change.change();
+                  },
+                  child:
+                      Text(change.isChanged == true ? "Changed" : "rechange"),
+                ),
+              );
+            });
           },
         );
       },
@@ -199,8 +199,8 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class Change with ChangeNotifier {
-  bool isChanged = false;
+class PasswordVisibility with ChangeNotifier {
+  bool isChanged = true;
   change() {
     isChanged = !isChanged;
     notifyListeners();

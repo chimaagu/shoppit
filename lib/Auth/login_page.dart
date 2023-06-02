@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
                       gradient: LinearGradient(
                         colors: [
                           primaryColor,
-                          secondaryColor,
+                          Colors.white,
                         ],
                         begin: Alignment.bottomRight,
                         end: Alignment.topLeft,

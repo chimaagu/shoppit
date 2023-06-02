@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
 
-var primaryColor = Colors.deepPurple;
+var primaryColor = Colors.green;
 var secondaryColor = Colors.deepOrange;

@@ -22,12 +22,13 @@ class RegisterPage extends StatelessWidget {
             height: 300,
             width: double.maxFinite,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  primaryColor,
-                  secondaryColor,
-                ],
-              ),
+              // gradient: LinearGradient(
+              //   colors: [
+              //     primaryColor,
+              //     Colors.white,
+              //   ],
+              // ),
+              color: Colors.green.shade900,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
