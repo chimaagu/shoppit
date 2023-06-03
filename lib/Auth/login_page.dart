@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:new_app/Colors/app_colors.dart';
+import 'package:new_app/Providers/auth_provider.dart';
 import 'package:new_app/Widgets/reusable_widgets.dart';
+import 'package:new_app/home_page.dart';
+import 'package:provider/provider.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController password = TextEditingController();
+  TextEditingController username = TextEditingController();
+
+  bool isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
+    var passwordV = Provider.of<PasswordVisibility>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -67,14 +81,15 @@ class LoginPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 15),
               child: Text(
-                "Email",
+                "Username",
                 style: GoogleFonts.poppins(),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
-                decoration: InputDecoration(),
+                controller: username,
+                decoration: const InputDecoration(),
               ),
             ),
             Padding(
@@ -84,24 +99,72 @@ class LoginPage extends StatelessWidget {
                 style: GoogleFonts.poppins(),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
-                decoration: InputDecoration(),
+                obscureText: passwordV.isChanged,
+                controller: password,
+                decoration: const InputDecoration(),
               ),
             ),
             Align(
               alignment: Alignment.centerRight,
               child: Padding(
                 padding: const EdgeInsets.only(right: 15, top: 10),
-                child: Text(
-                  "Hide password",
-                  style: GoogleFonts.poppins(),
+                child: GestureDetector(
+                  onTap: () {
+                    passwordV.change();
+                  },
+                  child: Text(
+                    !passwordV.isChanged ? "Hide Password" : "Show Password",
+                    style: GoogleFonts.poppins(),
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 30),
-            customButton(margin: 15, text: "Login"),
+            Consumer<AuthProvider>(builder: (context, authProvider, child) {
+              return customButton(
+                margin: 15,
+                text: isLoading == true ? "Loading.. Please wait" : "Login",
+                onTap: () {
+                  if (username.text.isEmpty || password.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Required fields cannot be empty"),
+                        backgroundColor: Colors.red,
+                        margin: EdgeInsets.only(
+                          bottom: 15,
+                          left: 10,
+                          right: 10,
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  } else {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    authProvider
+                        .login(
+                      context: context,
+                      password: password.text,
+                      username: username.text,
+                    )
+                        .then(
+                      (value) {
+                        setState(
+                          () {
+                            isLoading = false;
+                          },
+                        );
+                        Navigator.pushNamed(context, "home_page");
+                      },
+                    );
+                  }
+                },
+              );
+            }),
             const SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

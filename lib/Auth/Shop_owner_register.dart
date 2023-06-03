@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_flushbar/flutter_flushbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:new_app/Providers/auth_provider.dart';
 import 'package:new_app/Widgets/reusable_widgets.dart';
@@ -22,6 +23,7 @@ class _ShopOwnerRegisterState extends State<ShopOwnerRegister> {
   TextEditingController street = TextEditingController();
   TextEditingController houseNumber = TextEditingController();
   TextEditingController password = TextEditingController();
+  bool register = false;
 
   @override
   Widget build(BuildContext context) {
@@ -139,9 +141,20 @@ class _ShopOwnerRegisterState extends State<ShopOwnerRegister> {
                   ),
                   const SizedBox(height: 20),
                   TextField(
+                    controller: houseNumber,
+                    decoration: InputDecoration(
+                      hintText: "House Number",
+                      hintStyle: GoogleFonts.poppins(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: password,
                     obscureText: visible.isChanged,
                     decoration: InputDecoration(
-                        hintText: "House Number",
+                        hintText: "password",
                         hintStyle: GoogleFonts.poppins(
                           color: Colors.grey,
                         ),
@@ -170,20 +183,52 @@ class _ShopOwnerRegisterState extends State<ShopOwnerRegister> {
                       builder: (context, authprovider, child) {
                     return customButton(
                       margin: 0,
-                      text: "Submit",
+                      text:
+                          register == true ? "Loading.. please wait" : "Submit",
                       onTap: () {
-                        authprovider.register(
-                          city: city.text,
-                          context: context,
-                          email: email.text,
-                          firstname: firstname.text,
-                          houseNumber: houseNumber.text,
-                          lastname: lastname.text,
-                          password: password.text,
-                          phone: phone.text,
-                          street: street.text,
-                          username: username.text,
-                        );
+                        if (street.text == "" ||
+                            houseNumber.text == "" ||
+                            city.text == "" ||
+                            email.text == "" ||
+                            firstname.text == "" ||
+                            password.text == "" ||
+                            username.text == "") {
+                          // Flushbar(
+                          //   backgroundColor: Colors.red,
+                          // );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Please enter all fields"),
+                              backgroundColor: Colors.red,
+                              margin: EdgeInsets.only(
+                                  bottom: 15, left: 10, right: 10),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        } else {
+                          setState(() {
+                            register = true;
+                          });
+                          authprovider
+                              .register(
+                            city: city.text,
+                            context: context,
+                            email: email.text,
+                            firstname: firstname.text,
+                            houseNumber: houseNumber.text,
+                            lastname: lastname.text,
+                            password: password.text,
+                            phone: phone.text,
+                            street: street.text,
+                            username: username.text,
+                          )
+                              .then((value) {
+                            setState(() {
+                              register = false;
+                            });
+                            Navigator.pushNamed(context, "login");
+                          });
+                        }
                       },
                     );
                   }),

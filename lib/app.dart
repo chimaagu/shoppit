@@ -5,6 +5,7 @@ import 'package:new_app/Auth/login_page.dart';
 import 'package:new_app/Auth/not_you.dart';
 import 'package:new_app/Auth/register.dart';
 import 'package:new_app/Colors/app_colors.dart';
+import 'package:new_app/Screens/home_page.dart';
 import 'package:new_app/Screens/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         "not_you": (context) => const NotYouPage(),
         "register": (context) => const RegisterPage(),
         "shop_register": (context) => const ShopOwnerRegister(),
+        "base_page": (context) => const BasePage(),
       },
     );
   }
